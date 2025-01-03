@@ -1,0 +1,198 @@
+{% load static %}
+
+<title>Update Recipe</title>
+
+{% block start %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        background: linear-gradient(45deg, #f4f7f6, #e6f7e6);
+        margin: 0;
+        padding: 0;
+    }
+    
+    h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #1b7e47;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    /* Navbar Styles */
+    #navbar {
+        position: relative;
+        top: 25px;
+        z-index: 9999; /* Ensure navbar is above other elements */
+        width: 100%;
+        background: linear-gradient(to right, #3b9d65, #1b7e47);
+        border-radius: 20px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        animation: floating 5s ease-in-out infinite; /* Floating animation */
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    
+    /* Navbar Hover Effect */
+    #navbar:hover {
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+        transform: translateY(-5px); /* Slightly lift the navbar on hover */
+    }
+    
+    .navbar {
+        margin: 0 auto;
+        max-width: 900px;
+        padding: 10px 30px;
+        border-radius: 20px;
+    }
+    
+    .navbar-brand {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        color: white !important;
+    }
+    
+    .navbar-nav .nav-item .nav-link {
+        color: white !important;
+        font-weight: 600;
+        font-size: 1.1rem;
+        z-index: 10000; /* Ensure links are on top */
+    }
+    
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #ffd700 !important;
+        text-decoration: underline;
+    }
+    
+    /* Animation for floating effect */
+    @keyframes floating {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(10px); /* Float down and up */
+        }
+    }
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark" id="navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">BiteCraft</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/search">Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/viewrecipe/">Recipes</a> 
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile/{{request.user.id}}/">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/log_out">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<div class="container mt-5">
+    <form class="col-6 mx-auto p-3 shadow-lg" method="POST" enctype="multipart/form-data" style="background-color: rgb(255, 255, 255);border-radius: 5%;">
+        {% csrf_token %}
+        <h2>Update Recipe</h2>
+        <hr style="color: rgb(0, 0, 0);">
+        
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Recipe Name</label>
+            <input name="recipe_name" value="{{ recipe.recipe_name }}" type="text" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Recipe Description</label>
+            <textarea class="form-control" name="recipe_description" required>{{ recipe.recipe_description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Instructions</label>
+            <textarea class="form-control" name="instructions" required>{{ recipe.instructions }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Cooking Time</label>
+            <input name="cooking_time" type="text" value="{{ recipe.cooking_time }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Recipe Image (Leave it empty to keep the current image)</label>
+            <input type="file" name="recipe_image" class="form-control">
+        </div>
+
+        <h4>Ingredients</h4>
+        <div class="mb-3" id="ingredients-container">
+            {% for ingredient in recipe.ingredients.all %}
+                <div class="ingredient-group">
+                    <input type="text" name="ingredient_name[]" class="form-control mb-2" value="{{ ingredient.name }}" placeholder="Ingredient Name" required>
+                    <input type="text" name="ingredient_quantity[]" class="form-control mb-2" value="{{ ingredient.quantity }}" placeholder="Quantity" required>
+                    <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-primary" id="add-ingredient-btn">Add Ingredient</button>
+
+        <div class="d-grid gap-2 col-6 mx-auto mt-3">
+            <button type="submit" class="btn btn-success">Update Recipe</button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+
+<script>
+    document.getElementById('add-ingredient-btn').addEventListener('click', function() {
+        var container = document.getElementById('ingredients-container');
+        var newIngredientGroup = document.createElement('div');
+        newIngredientGroup.classList.add('ingredient-group');
+        
+        newIngredientGroup.innerHTML = `
+            <input type="text" name="ingredient_name[]" class="form-control mb-2" placeholder="Ingredient Name" required>
+            <input type="text" name="ingredient_quantity[]" class="form-control mb-2" placeholder="Quantity" required>
+            <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+        `;
+        
+        container.appendChild(newIngredientGroup);
+        
+        // Add remove functionality
+        newIngredientGroup.querySelector('.remove-ingredient-btn').addEventListener('click', function() {
+            container.removeChild(newIngredientGroup);
+        });
+    });
+
+    // Remove ingredient functionality for existing ingredients
+    document.querySelectorAll('.remove-ingredient-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var ingredientGroup = button.closest('.ingredient-group');
+            document.getElementById('ingredients-container').removeChild(ingredientGroup);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% load static %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<div style="position: relative; padding: 2%">
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" style="display: flex; flex-wrap: wrap; justify-content: center;">
+        {% for recipe in recipes %}
+            {% if recipe.user == request.user %}
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-lg border-0 rounded-lg overflow-hidden card-hover">
+                        <div class="view overlay">
+                            <img class="card-img-top" src="/media/{{recipe.recipe_image}}" alt="Card image cap" style="width: 100%; height: 15vw; object-fit: cover;">
+                            <a href="#!">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{recipe.recipe_name}}</h5>
+                            <p class="card-text">Created by: <a href="/profile/{{request.user.id}}" style="text-decoration: none; color: #333;">{{recipe.user.username}}</a></p>
+                            <div class="d-flex justify-content-center">
+                                <a href="/recipe_detail/{{recipe.id}}/" class="btn btn-primary btn-lg" id="bt1" style="width: 60%; text-align: center;">
+                                  <i class="fa-solid fa-eye"></i>View
+                                </a>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <a href="/delete_recipe/{{recipe.id}}/" class="btn btn-danger btn-lg" id="bt2"><i class="fas fa-trash" style="color: #fff;"></i> Delete</a>
+                                <a href="/update_recipe/{{recipe.id}}" class="btn btn-warning btn-lg" id="bt3"><i class="fas fa-edit" style="color: #fff;"></i> Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col mb-4">
+                    <div class="card h-100 shadow-lg border-0 rounded-lg overflow-hidden card-hover">
+                        <img class="card-img-top" src="/media/{{recipe.recipe_image}}" alt="Card image cap" style="width: 100%; height: 15vw; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{recipe.recipe_name}}</h5>
+                            <p class="card-text">Created by: <a href="/profile/{{recipe.user.id}}" style="text-decoration: none; color: #333;">{{recipe.user.username}}</a></p>
+                            <div class="d-flex justify-content-center">
+                              <a href="/recipe_detail/{{recipe.id}}/" class="btn btn-outline-success btn-lg">
+                                <i class="fas fa-eye" style="color: #fff; margin-right: 8px;"></i> View
+                            </a>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Inline CSS and Animations -->
+<style>
+    /* Global Styles */
+    body, html {
+        background-color: #f4f4f4; /* Light gray background */
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        background: #ffffff; /* Clean white background for card */
+        border: 1px solid #ddd; /* Subtle border for definition */
+    }
+
+    .card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 20px;
+        text-align: left;
+    }
+
+    .card-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #333; /* Dark gray for card title */
+        margin-bottom: 15px;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #555; /* Slightly lighter gray for text */
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 50px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button colors */
+    .btn-primary {
+        background-color: #4CAF50; /* Green button color */
+        border: 1px solid #4CAF50;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049;
+        border: 1px solid #45a049;
+    }
+
+    .btn-danger {
+        background-color: #f44336;
+        border: 1px solid #f44336;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background-color: #e57373;
+        border: 1px solid #e57373;
+    }
+
+    .btn-warning {
+        background-color: #ff9800;
+        border: 1px solid #ff9800;
+        color: #fff;
+    }
+
+    .btn-warning:hover {
+        background-color: #ffb74d;
+        border: 1px solid #ffb74d;
+    }
+
+    .mask {
+        background-color: rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .view:hover .mask {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Animations */
+    .animate__fadeIn {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+
+    .card-body .btn {
+        width: 60%;
+        margin: 0 auto; /* Center the View button */
+    }
+
+    /* Media Query for Responsiveness */
+    @media (max-width: 768px) {
+        .card-body .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #4CAF50;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+
+    /* Adjust center position for a single recipe result */
+    .row.row-cols-1.row-cols-md-3 {
+        display: flex;
+        justify-content: center;
+    }
+
+    .col {
+        width: 50%;
+    }
+
+    .col img {
+        height: 20vw;
+        object-fit: cover;
+    }
+</style>
+
+<!-- Optional JavaScript to Enhance UX -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>

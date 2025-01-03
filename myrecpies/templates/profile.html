@@ -1,0 +1,280 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/media/image/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <title>| BiteCraft Profile Page</title>
+
+    <style>
+        /* Background and Global Styling */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f4f4f4; /* Light grey background */
+            color: #333; /* Darker text for better contrast */
+            margin-top: 80px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #4CAF50;
+            transform: scale(1.1);
+        }
+
+        .navbar-toggler-icon {
+            color: #4CAF50;
+        }
+
+        /* Profile Card Styling */
+        .profile-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .profile-card-header {
+            background: linear-gradient(to right, #4CAF50, #388E3C); /* Keeping green accents */
+            height: 200px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-name h5 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 100px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .profile-name p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* About Section Styling */
+        .about-section {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 2s ease-out;
+            margin-top: 30px;
+        }
+
+        .about-section p {
+            font-size: 1rem;
+            font-style: italic;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Button Styling */
+        .btn-dark {
+            background: linear-gradient(90deg, #4CAF50, #38a069);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-dark:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Footer Styling */
+        footer {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        footer h4 {
+            color: #555;
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        footer a {
+            color: #333;
+            font-size: 24px;
+            padding: 10px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #4CAF50;
+        }
+
+        .social-icons a {
+            margin: 0 15px;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Make sure the page is scrollable */
+        .container {
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-lg mb-4">
+        <a class="navbar-brand" href="/" style="font-weight: 700; color: #4CAF50; font-size: 24px;margin-left: 25px;">BiteCraft</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link " href="/search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/viewrecipe/">Recipes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/profile/{{request.user.id}}" >Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/log_out" style="margin-right: 25px;">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card profile-card">
+                <div class="profile-card-header">
+                    <div class="d-flex justify-content-center">
+                        {% if userdetails.profile_pic %}
+                        <img src="/media/{{ userdetails.profile_pic }}" alt="Profile Image" class="profile-pic">
+                        {% else %}
+                        <img src="/media/image/Profileimg.png" alt="Generic placeholder image" class="profile-pic">
+                        {% endif %}
+                    </div>
+                    <div class="profile-name">
+                        <h5>{{ userdetails.user.username }}</h5>
+                        <p>{{ userdetails.user.first_name }} {{ userdetails.user.last_name }}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <p class="h5">Recipes: </p>
+                        <p class="text-muted">{{ recipe_count }}</p>
+                        
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="d-flex justify-content-between">
+                        <p class="h5">Date of Birth:</p>
+                        <p class="text-muted">{{ userdetails.dob|date:"d M Y" }}</p>
+                    </div>
+
+
+                    <!-- Bio Section -->
+                    <div class="about-section">
+                        <p>{{ userdetails.bio }}</p>
+                    </div>
+
+                    <!-- Profile Update Status -->
+                    {% if userdetails.needs_update %}
+                    <div class="alert alert-warning">
+                        <strong>Warning:</strong> Your profile needs to be updated.
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/update_profile/{{ userdetails.id }}" class="btn btn-dark">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-5">
+        <h2 class="text-center">Recent Recipes</h2>
+        {% include 'card.html' %}
+    </div>
+</div>
+
+<footer>
+    <div class="social-icons">
+        <a href="https://www.facebook.com/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+        <a href="https://www.twitter.com/"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+        <a href="https://www.instagram.com/"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+    </div>
+    <h4>Developed by Shourya</h4>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
